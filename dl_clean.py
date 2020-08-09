@@ -2,36 +2,47 @@ import time
 import glob
 import os
 import sys
+import configparser
 
-# set quite mode
+# import config.ini file
+config = configparser.ConfigParser()
+config.read("config.ini")
+
+# rule = config["ext"]
+# for value in rule: 
+#     print (value)
+
+# if -q flag specified, set quite mode
 quiet = False;
 if len(sys.argv) > 2 and sys.argv[2] == "-q":
     quiet = True
 
+debug = True #
+
+filetypes = list(config["ext"]) # get filetypes defined in config.ini
 
 def move(path):
-
-    # get contents of download dr
-    downloads = glob.glob(path);
-    size = len(downloads)
-    if size == 0: 
-        print("Nothing to move")
+    # takes the watched directory as first argument
+    watched = glob.glob(path) # get contents of watched dir
+    if len(watched) == 0:
+        pass # pass on empty dir
     else: 
-        for fullpath in downloads:
-            name = os.path.basename(fullpath) # filename
-            filename, ext = os.path.splitext(fullpath) # extension
-            if ext in [".jpg",".png",".svg"]: 
-                os.rename(fullpath, os.environ["HOME"] + "/img/" + name)
-                if quiet == False:
-                    os.system("notify-send " + name)
-            elif ext in [".pdf"]:
-                os.rename(fullpath, os.environ["HOME"] + "/pdf/" + name)
-                if quiet == False: 
-                    os.system("notify-send " + name)
+        for file in watched: 
+            filename = os.path.basename(file) # file.txt
+            name, extension = os.path.splitext(file) # (file, .txt)
+
+            if extension in filetypes: # check for existing rule in config
+                os.rename(file, os.environ["HOME"] + config["ext"][extension] + filename)
+                if quiet == False: # -q flag
+                    os.system("notify-send" + name) 
+            else: 
+                if debug == True:
+                    print ("Missing rules for this extensions: " + extension)
+            
 
 def run():
     while True:
-        time.sleep(5)
+        time.sleep(3)
         move(sys.argv[1])
 
 if __name__ == "__main__":
