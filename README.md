@@ -12,7 +12,12 @@ Example:
 
 Changelog:
 v0.1 - Just moves image files & pdfs
+v0.0.2 - Moves files according to rules set in dl_clean.conf. Also has a debug & quiet mode.
 
 Todo:
-Make it installable? Idk this is a shitty WIP todo
-Properly daemonize because timeout loops are bad for some reason
+
+1. Improve CLI usability with argparse & man page
+2. Daemonise properly rather than setting to timeout
+3. Search function for looking for .conf, currently has to be in run directory
+4. Log output flag, i.e. --verbose
+5. More flexible config for locations. Currently home dir is assumed as output location

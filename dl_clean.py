@@ -6,18 +6,19 @@ import configparser
 
 # import config.ini file
 config = configparser.ConfigParser()
-config.read("config.ini")
+config.read("dl_clean.conf")
 
-# rule = config["ext"]
-# for value in rule: 
-#     print (value)
-
-# if -q flag specified, set quite mode
-quiet = False;
-if len(sys.argv) > 2 and sys.argv[2] == "-q":
+#if -q flag specified, set quite mode
+quiet = False
+if "-q" in sys.argv:
     quiet = True
+    print ("dl_clean started in quiet mode")
 
-debug = True #
+# if debug flag, output information about unmoved files
+debug = False
+if "-debug" in sys.argv:
+    debug = True
+    print ("dl_clean started in debug mode")
 
 filetypes = list(config["ext"]) # get filetypes defined in config.ini
 
@@ -34,7 +35,7 @@ def move(path):
             if extension in filetypes: # check for existing rule in config
                 os.rename(file, os.environ["HOME"] + config["ext"][extension] + filename)
                 if quiet == False: # -q flag
-                    os.system("notify-send" + name) 
+                    os.system("notify-send " + config["ext"][extension] + filename) 
             else: 
                 if debug == True:
                     print ("Missing rules for this extensions: " + extension)
