@@ -17,8 +17,9 @@ v0.0.3 -
 
 Todo:
 
-1. Improve CLI usability with argparse & man page
+1. Improve CLI usability with argparse & man page && remove * and "
 2. ~~Daemonise properly rather than setting to timeout~~
-3. Search function for looking for .conf, currently has to be in run directory
+3. Logic looking for config in fs
 4. Log output flag, i.e. --verbose
 5. More flexible config for locations. Currently home dir is assumed as output location
+6. Installer? 
